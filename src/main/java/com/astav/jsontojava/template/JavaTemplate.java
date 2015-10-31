@@ -34,7 +34,13 @@ public class JavaTemplate {
         }
         stringBuilder.append("}\r\n");
 
-        String packageDirectory = packageName.replaceAll("\\.", File.separator);
+        //String packageDirectory = packageName.replaceAll("\\.", File.separator);
+         /**
+         * modified by wang.gang@msnc.om
+         * my project inputparam for packageName is just “com.example.test.demo”, so simple ,don't need complex
+         * 2015-10-30 21:26:39
+         */
+        String packageDirectory = packageName;
         if (!packageDirectory.endsWith(File.separator)) packageDirectory = packageDirectory + File.separator;
         String file = String.format("%s%s%s%s.java", outputDirectory, File.separator, packageDirectory, className);
         System.out.print(String.format("Writing file '%s' ...", file));
