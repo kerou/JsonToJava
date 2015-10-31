@@ -25,19 +25,27 @@ public class JavaTemplate {
         for (String importPackageName : classFileData.getImportPackages()) {
             stringBuilder.append("import ").append(importPackageName).append(";\r\n");
         }
-        stringBuilder.append("import java.util.*;\r\n\r\n");
+         stringBuilder.append("import java.util.*;\r\n\r\n");
+        
+        StringBuilder methodsStringBuilder = new StringBuilder();
+        //begin class
         stringBuilder.append("public class ").append(className).append(" {\r\n");
         for (Map.Entry<String, String> variablesToTypeEntry : classFileData.getMapOfVariablesToTypes().entrySet()) {
             String v = variablesToTypeEntry.getKey();
             String t = variablesToTypeEntry.getValue();
-            appendJsonKey(stringBuilder, v).append(" private ").append(t).append(" ").append(v).append(";\r\n");
+            //appendJsonKey(stringBuilder, v).append(" private ").append(t).append(" ").append(v).append(";\r\n");
+            stringBuilder.append("\tprivate ").append(t).append(" ").append(v).append(";\r\n");
+            methodsStringBuilder.append(getMethodString(t,v));
         }
+        
+        stringBuilder.append("\r\n").append(methodsStringBuilder).append("\r\n");
+        //end class
         stringBuilder.append("}\r\n");
 
-        //String packageDirectory = packageName.replaceAll("\\.", File.separator);
-         /**
-         * modified by wang.gang@msnc.om
-         * my project inputparam for packageName is just “com.example.test.demo”, so simple ,don't need complex
+//        String packageDirectory = packageName.replaceAll("\\.", File.separator);
+        
+        /**
+         * modified by wanggang
          * 2015-10-30 21:26:39
          */
         String packageDirectory = packageName;
@@ -49,6 +57,20 @@ public class JavaTemplate {
         System.out.print("done.");
         System.out.println();
         return outputFile;
+    }
+
+    private String getMethodString(String type,String virableName){
+        StringBuilder stringBuilder = new StringBuilder();
+        //get method
+        stringBuilder.append("\tpublic ").append(type).append(" get").append(StringUtils.capitalize(virableName)).append("()").append("{\r\n");
+        stringBuilder.append("\t\treturn ").append(virableName).append(";\r\n");
+        stringBuilder.append("\t}");
+        //set method
+        stringBuilder.append("\tpublic void").append(" set").append(StringUtils.capitalize(virableName)).append("(").append(StringUtils.capitalize(type)).append(" ").append(virableName).append(")").append("{\r\n");
+        stringBuilder.append("\t\tthis.").append(virableName).append(" = ").append(virableName).append(";\r\n");
+        stringBuilder.append("\t}");
+        
+        return stringBuilder.toString();
     }
 
     private StringBuilder appendJsonKey(StringBuilder stringBuilder, String entryKey) {
